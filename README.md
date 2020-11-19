@@ -1,3 +1,3 @@
 # UNO
 
-The famous uno game
+The famous UNO game
