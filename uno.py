@@ -29,6 +29,12 @@ class Game:
       player.draw(7)
     self.piletop = self.deck.draw()[0]
     self.piletop.active = False
+
+  def won(self) -> bool:
+    for player in self.players:
+      if len(player.hand) == 0:
+        return True
+    return False
   
   def nextplayer(self) -> None:
     self.turn += 1 if not self.inversed else -1
@@ -86,7 +92,10 @@ class Player:
       if self.playable():
         played_card = self.play(0)
     if played_card and played_card.color == 'white':
-      game.piletop.color = colors[0]
+      colors_count = [0, 0, 0, 0]
+      for card in self.hand:
+        colors_count[colors.index(card.color)] += 1
+      game.piletop.color = colors[colors_count.index(max(colors_count))]
 
   def print_playable(self) -> list:
     print('Playable cards:')
@@ -165,12 +174,12 @@ def line(n: int = 1) -> None:
 
 
 # GAME START
-game = Game(4)
+game = Game(2)
 
 game.start()
 
 
-while True:
+while not game.won():
   clear()
 
   if game.piletop.value == '+4' and game.piletop.active:
@@ -219,7 +228,7 @@ while True:
       played_card = game.players[0].play(played_card_index)
   
     else:
-      input('Draw a card (enter): ')
+      input(f'{colored("No playable cards", "red")}, draw a card (enter): ')
 
       drawed = game.players[0].draw()[0]
 
@@ -272,7 +281,9 @@ while True:
     
   else:
     player = game.players[game.turn]
-    input('Wait for your turn to come.')
+    print('Wait for your turn to come.')
     player.choose()
 
   game.nextplayer()
+
+print('WON')
