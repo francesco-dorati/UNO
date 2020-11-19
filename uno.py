@@ -192,7 +192,7 @@ while True:
   line()
 
   game.players[0].print_hand()
-  line(2)
+  line(3)
 
   played_card = None
 
@@ -213,11 +213,11 @@ while True:
       drawed = game.players[0].draw()[0]
 
       clear()
+
       game.print_player_stats()
       line(3)
 
-      print('Pile top:')
-      print(colored(game.piletop.value, game.piletop.color))
+      game.print_piletop()
       line(3)
 
       print('You drawed: ')
@@ -263,4 +263,4 @@ while True:
     input('Wait for your turn to come.')
     # other player instructions
 
-  game.nextplayer(played_card)
+  game.nextplayer()
