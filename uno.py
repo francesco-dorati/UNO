@@ -76,7 +76,18 @@ class Player:
     game.piletop = card
     self.hand.remove(card)
     return card
-  
+
+  def choose(self) -> None:
+    played_card = None
+    if self.playable():
+      played_card = self.play(0)
+    else:
+      self.draw()
+      if self.playable():
+        played_card = self.play(0)
+    if played_card and played_card.color == 'white':
+      game.piletop.color = colors[0]
+
   def print_playable(self) -> list:
     print('Playable cards:')
     if game.turn == 0:
@@ -260,7 +271,8 @@ while True:
       game.piletop.color = colors[chosen_color_index]
     
   else:
+    player = game.players[game.turn]
     input('Wait for your turn to come.')
-    # other player instructions
+    player.choose()
 
   game.nextplayer()
