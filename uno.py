@@ -4,7 +4,9 @@
   medium/random: chooses randomly
   hard: chooses always specials
 '''
-
+# TODO add animations
+# TODO make non your tur line gray
+# TODO add uno before last card
 import random
 import os
 import sys
@@ -56,7 +58,6 @@ class Game:
     print('Pile top:')
     print(colored(self.piletop.value, self.piletop.color, attrs=['bold']))
     
-# TODO add No playable cards before draw
 
 
 class Player:
@@ -86,6 +87,8 @@ class Player:
   def choose(self) -> None:
     played_card = None
     if self.playable():
+      # TODO choose card
+      # if white play white else play stop then +2 then major color
       played_card = self.play(0)
     else:
       self.draw()
@@ -94,7 +97,8 @@ class Player:
     if played_card and played_card.color == 'white':
       colors_count = [0, 0, 0, 0]
       for card in self.hand:
-        colors_count[colors.index(card.color)] += 1
+        if not card.color == 'white':
+          colors_count[colors.index(card.color)] += 1
       game.piletop.color = colors[colors_count.index(max(colors_count))]
 
   def print_playable(self) -> list:
@@ -174,7 +178,7 @@ def line(n: int = 1) -> None:
 
 
 # GAME START
-game = Game(2)
+game = Game(4)
 
 game.start()
 
@@ -219,7 +223,7 @@ while not game.won():
   if game.turn == 0:
 
     if playable:
-      played_card_index = input('Insert the card index: ')
+      played_card_index = input(f'It\'s {colored("your turn", "green", attrs=["bold"])}. Insert the card index: ')
       while not played_card_index.isdigit() or int(played_card_index) not in range(1, len(playable) + 1):
         played_card_index = input('Insert the card index: ')
       
@@ -282,6 +286,7 @@ while not game.won():
   else:
     player = game.players[game.turn]
     print('Wait for your turn to come.')
+    time.sleep(3)
     player.choose()
 
   game.nextplayer()
